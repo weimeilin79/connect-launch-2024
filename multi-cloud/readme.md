@@ -54,7 +54,7 @@ Make sure you have the following prerequisites in place before running the simul
     RP_BOOTSTRAP_SERVER=""
     RP_SASL_MECHANISM=""
     RP_USER_USERNAME=""
-    RP_USER_PASSWORD
+    RP_USER_PASSWORD=""
     ```
 
     Set the environment variable 

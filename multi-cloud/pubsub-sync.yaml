@@ -1,0 +1,33 @@
+input:
+  gcp_pubsub:
+    project: "byoc-demo" # No default (required)
+    subscription: "gcp_pubsub_subscription" # No default (required)
+    sync: false
+    max_outstanding_messages: 1000
+    max_outstanding_bytes: 1e+09
+    create_subscription:
+      enabled: true
+      topic: "gcp_pubsub"
+pipeline:
+  processors:
+    - bloblang: |
+        root.submarine_id = this.submarine_id
+        root.timestamp = this.timestamp.or(this.time)
+        root.latitude = this.coordinates.lat
+        root.longitude = this.coordinates.lon
+        root.depth = this.depth_feet / 3.28084
+        root.pressure_mpa = this.pressure_psi / 145.038
+        root.temperature = (this.temperature_fahrenheit - 32) * 5 / 9
+        root.signal_strength_db = this.signal_strength_db
+output:
+  kafka_franz:
+    seed_brokers:
+      - {YOUR_RP_BOOTSTRAP_SERVER}
+    topic: mariana_trench
+    compression: none
+    tls:
+      enabled: true
+    sasl:
+      - mechanism: {YOUR_RP_SASL_MECHANISM}
+        username: {YOUR_RP_USER_USERNAME}
+        password: {YOUR_RP_USER_PASSWORD}

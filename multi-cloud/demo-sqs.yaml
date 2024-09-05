@@ -1,0 +1,30 @@
+input:
+  aws_sqs:
+    url: "https://{YOUR_SQS_URL}/aws-sqs" # No default (required)
+    region: {YOUR_AWS_REGION}
+    credentials:
+      id: {YOUR_AWS_ID}
+      secret: {YOUR_AWS_SECRET}
+pipeline:
+  processors:
+    - bloblang: |
+        root.submarine_id = this.sub_id
+        root.timestamp = this.time
+        root.latitude = this.location.latitude
+        root.longitude = this.location.longitude
+        root.depth = this.location.depth_meters
+        root.pressure_mpa = this.pressure_mpa
+        root.temperature = this.temp_celsius
+        root.signal_strength_db = this.signal_db
+output:
+  kafka_franz:
+    seed_brokers:
+      - {YOUR_RP_BOOTSTRAP_SERVER}
+    topic: mariana_trench
+    compression: none
+    tls:
+      enabled: true
+    sasl:
+      - mechanism: {YOUR_RP_SASL_MECHANISM}
+        username: {YOUR_RP_USER_USERNAME}
+        password: {YOUR_RP_USER_PASSWORD}

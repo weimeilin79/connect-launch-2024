@@ -1,0 +1,47 @@
+input:
+  label: ""
+  kafka_franz:
+    seed_brokers: 
+      - {YOUR_RP_BOOTSTRAP_SERVER}
+    topics: 
+      - legal_cases
+    regexp_topics: false
+    consumer_group: "legal-pipe" 
+    tls:
+      enabled: true
+    sasl:
+      - mechanism: {YOUR_RP_SASL_MECHANISM}
+        username: {YOUR_RP_USER_USERNAME}
+        password: {YOUR_RP_USER_PASSWORD}
+
+pipeline:
+  processors:
+    - mapping: |
+        meta doc = this
+        meta summary = this.summary.string()
+        meta key = meta("kafka_key").string()
+    - log:
+        message: ${! meta() }
+    - branch:
+        processors:
+          - openai_embeddings:
+              server_address: https://api.openai.com/v1
+              api_key: {YOUR_OPENAI_API_KEY}
+              model: text-embedding-3-small #1536 dimensions
+        result_map: |-
+          root.embeddings = this
+          root.metadata = metadata("doc").string()
+    - log:
+        message: ${! json("embeddings") }
+output:
+  pinecone:
+    max_in_flight: 64
+    host: {YOUR_PINECONE_HOST}
+    api_key: {YOUR_PINECONE_API_KEY}
+    operation: upsert-vectors
+    id: ${! metadata("kafka_key").string() }
+    vector_mapping: embeddings
+    metadata_mapping: |- 
+      root.summary = @.summary
+      root.text = @.doc.string()
+      root.timestamp = timestamp_unix()

@@ -51,6 +51,10 @@ Make sure you have the following prerequisites in place before running the simul
     YOUR_AWS_REGION=""
     YOUR_AWS_ID=""
     YOUR_AWS_SECRET=""
+    RP_BOOTSTRAP_SERVER=""
+    RP_SASL_MECHANISM=""
+    RP_USER_USERNAME=""
+    RP_USER_PASSWORD
     ```
 
     Set the environment variable 

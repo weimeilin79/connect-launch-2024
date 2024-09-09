@@ -1,7 +1,7 @@
 input:
   gcp_pubsub:
-    project: {CGP_PROJECT} # No default (required)
-    subscription: {CGP_SUBSCRIPTION} # No default (required)
+    project: ${CGP_PROJECT} # No default (required)
+    subscription: redpanda-sub # No default (required)
     sync: false
     max_outstanding_messages: 1000
     max_outstanding_bytes: 1e+09
@@ -22,6 +22,6 @@ pipeline:
 output:
   kafka_franz:
     seed_brokers:
-      - localhost:19092
+      - redpanda:19092
     topic: mariana_trench
     compression: none

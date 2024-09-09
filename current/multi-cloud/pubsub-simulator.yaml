@@ -27,8 +27,8 @@ pipeline:
         }
 output:
   gcp_pubsub:
-    project: "byoc-demo" 
-    topic: "gcp_pubsub" 
+    project: {CGP_PROJECT}
+    topic: {CGP_SUBSCRIPTION}
     max_in_flight: 64
     count_threshold: 100
     delay_threshold: 10ms

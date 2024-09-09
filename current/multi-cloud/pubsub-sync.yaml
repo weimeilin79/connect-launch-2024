@@ -1,0 +1,27 @@
+input:
+  gcp_pubsub:
+    project: {CGP_PROJECT} # No default (required)
+    subscription: {CGP_SUBSCRIPTION} # No default (required)
+    sync: false
+    max_outstanding_messages: 1000
+    max_outstanding_bytes: 1e+09
+    create_subscription:
+      enabled: true
+      topic: "gcp_pubsub"
+pipeline:
+  processors:
+    - bloblang: |
+        root.submarine_id = this.submarine_id
+        root.timestamp = this.timestamp.or(this.time)
+        root.latitude = this.coordinates.lat
+        root.longitude = this.coordinates.lon
+        root.depth = this.depth_feet / 3.28084
+        root.pressure_mpa = this.pressure_psi / 145.038
+        root.temperature = (this.temperature_fahrenheit - 32) * 5 / 9
+        root.signal_strength_db = this.signal_strength_db
+output:
+  kafka_franz:
+    seed_brokers:
+      - localhost:19092
+    topic: mariana_trench
+    compression: none

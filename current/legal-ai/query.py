@@ -23,7 +23,7 @@ vector_store = PineconeVectorStore(
 print("Index Stats:", index.describe_index_stats())
 
 # Initialize the Retriever and QA chain
-retriever = vector_store.as_retriever()
+retriever = vector_store.as_retriever(search_kwargs={"k": 6})
 qa = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type="stuff",

@@ -1,0 +1,29 @@
+input:
+  kafka_franz:
+    seed_brokers: [ "redpanda:19092" ]
+    topics: [ "music-listening-logs" ]
+    consumer_group: "redpanda-s3-pipe"
+    commit_period: 3s
+pipeline:
+  processors:
+    - bloblang: |
+        root = this
+output:
+  aws_s3:
+    bucket: "redpanda-connect-demo" 
+    path: logs/music-listening-logs/${!timestamp_unix_nano()}.json
+    tags: {}
+    content_type: application/octet-stream
+    metadata:
+      exclude_prefixes: []
+    max_in_flight: 64
+    region: {AWS_REGION}
+    batching:
+      count: 100
+      processors:
+        - archive:
+            format: lines
+    credentials:
+      id: {AWS_ID}
+      secret: {AWS_SECRET}
+ 

@@ -14,7 +14,7 @@ app.use(express.static('public'));
 // Kafka Consumer Setup with KafkaJS
 const kafka = new Kafka({
     clientId: 'submarine-monitoring-12',  // Your client ID
-    brokers: `localhost:19092`,  // Redpanda Cloud broker
+    brokers: `redpanda:19092`,  // Redpanda Cloud broker
 });
 
 const consumer = kafka.consumer({ groupId: 'submarine-monitoring-group' });

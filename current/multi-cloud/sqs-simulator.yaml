@@ -26,9 +26,9 @@ pipeline:
 output:
   label: ""
   aws_sqs:
-    url: "https://{YOUR_SQS_URL}/aws-sqs" # No default (required)
+    url: "{SQS_URL}" # No default (required)
     max_in_flight: 64
-    region: {YOUR_AWS_REGION}
+    region: {AWS_REGION}
     credentials:
-      id: {YOUR_AWS_ID}
-      secret: {YOUR_AWS_SECRET}
+      id: {AWS_ID}
+      secret: {AWS_SECRET}

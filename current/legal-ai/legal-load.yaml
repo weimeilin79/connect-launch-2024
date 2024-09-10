@@ -29,10 +29,4 @@ output:
     topic: legal_cases
     compression: none
     key: ${! json("id") }
-    tls:
-      enabled: true
-    sasl:
-      - mechanism: ${RP_SASL_MECHANISM}
-        username: ${RP_USER_USERNAME}
-        password: ${RP_USER_PASSWORD}
 

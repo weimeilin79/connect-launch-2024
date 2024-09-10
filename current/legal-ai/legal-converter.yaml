@@ -2,18 +2,11 @@ input:
   label: ""
   kafka_franz:
     seed_brokers: 
-      - {RP_BOOTSTRAP_SERVER}
+      - ${RP_BOOTSTRAP_SERVER}
     topics: 
       - legal_cases
     regexp_topics: false
     consumer_group: "legal-pipe" 
-    tls:
-      enabled: true
-    sasl:
-      - mechanism: {RP_SASL_MECHANISM}
-        username: {RP_USER_USERNAME}
-        password: {RP_USER_PASSWORD}
-
 pipeline:
   processors:
     - mapping: |
@@ -26,7 +19,7 @@ pipeline:
         processors:
           - openai_embeddings:
               server_address: https://api.openai.com/v1
-              api_key: {OPENAI_API_KEY}
+              api_key: ${OPENAI_API_KEY}
               model: text-embedding-3-small #1536 dimensions
         result_map: |-
           root.embeddings = this
@@ -36,8 +29,8 @@ pipeline:
 output:
   pinecone:
     max_in_flight: 64
-    host: {PINECONE_HOST}
-    api_key: {PINECONE_API_KEY}
+    host: ${PINECONE_HOST}
+    api_key: ${PINECONE_API_KEY}
     operation: upsert-vectors
     id: ${! metadata("kafka_key").string() }
     vector_mapping: embeddings

@@ -48,10 +48,6 @@ def main():
         producer = KafkaProducer(
             bootstrap_servers=os.environ["RP_BOOTSTRAP_SERVER"],  
             value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-            security_protocol="SASL_SSL", 
-            sasl_mechanism=os.environ["RP_SASL_MECHANISM"],  # Use the SCRAM-SHA-256 mechanism
-            sasl_plain_username=os.environ["RP_USER_USERNAME"],  # SASL username
-            sasl_plain_password=os.environ["RP_USER_PASSWORD"],  # SASL password
         )
 
         # Set up signal handler for graceful shutdown

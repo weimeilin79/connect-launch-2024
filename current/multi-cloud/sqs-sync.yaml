@@ -1,10 +1,10 @@
 input:
   aws_sqs:
-    url: "https://{YOUR_SQS_URL}/aws-sqs" # No default (required)
-    region: "us-east-1"
+    url: ${SQS_URL} # No default (required)
+    region: ${AWS_REGION}
     credentials:
-      id: {YOUR_AWS_ID}
-      secret: {YOUR_AWS_SECRET}
+      id: ${AWS_ID}
+      secret: ${AWS_SECRET}
 pipeline:
   processors:
     - bloblang: |
@@ -19,6 +19,6 @@ pipeline:
 output:
   kafka_franz:
     seed_brokers:
-      - localhost:19092
+      - redpanda:19092
     topic: mariana_trench
     compression: none

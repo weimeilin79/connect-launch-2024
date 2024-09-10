@@ -10,20 +10,19 @@ pipeline:
         root = this
 output:
   aws_s3:
-    bucket: "redpanda-connect-demo" 
+    bucket: ${AWS_BUCKET_NAME}
     path: logs/music-listening-logs/${!timestamp_unix_nano()}.json
     tags: {}
     content_type: application/octet-stream
     metadata:
       exclude_prefixes: []
     max_in_flight: 64
-    region: {AWS_REGION}
+    region: ${AWS_REGION}
     batching:
       count: 100
       processors:
         - archive:
             format: lines
     credentials:
-      id: {AWS_ID}
-      secret: {AWS_SECRET}
- 
+      id: ${AWS_ID}
+      secret: ${AWS_SECRET}

@@ -1,7 +1,7 @@
 input:
   generate:
-    batch_size: 30
-    interval: 1s
+    batch_size: 2
+    interval: 3s
     mapping: |
       root.submarine_id = uuid_v4()
       root.timestamp = timestamp_unix()
